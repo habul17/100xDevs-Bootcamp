@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes-App</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: monospace;
+            background-color: black;
+            color: white;
+        }
+
+        #root {
+            display: flex;
+            /* background-color: red; */
+            justify-content: space-between;
+            height: 100vh;
+        }
+
+        #notesArea {
+            margin: 24px;
+            padding: 24px;
+        }
+
+        #inputArea {
+            display: flex;
+            flex-direction: column;
+            margin: 24px;
+            padding: 24px;
+        }
+
+        #input {
+            padding: 32px;
+            height: 150px;
+            width: 250px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        #btn {
+            padding: 6px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <div id="root">
+        <div id="notesArea">
+            Loading...
+        </div>
+        <div id="inputArea">
+            <input id="input" type="text">
+            <button id="btn">Create Note</button>
+        </div>
+    </div>
+</body>
+
+</html>
