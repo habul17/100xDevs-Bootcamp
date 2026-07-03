@@ -19,9 +19,9 @@ app.post("/signup", (req, res) => {
 
     const userExist = USERS.find(user => user.userName == userName);
 
-    if(userExist) {
+    if (userExist) {
         res.status(403).json({
-            message : "Username Already Exist"
+            message: "Username Already Exist"
         })
         return;
     }
@@ -30,7 +30,11 @@ app.post("/signup", (req, res) => {
         userName,
         password
     })
-} )
+
+    res.json({
+        message: "Sign Up Successfull"
+    })
+})
 
 // POST - signin
 
@@ -40,14 +44,14 @@ app.post("/signin", (req, res) => {
 
     const userExist = USERS.find(user => user.userName == userName && user.password == password);
 
-    if(!userExist) {
+    if (!userExist) {
         res.status(403).json({
-            message : "Username Doesn't Exist"
+            message: "Invalid Credentials"
         })
         return;
     }
 
-    const token = jwt.sign({userName}, process.env.JWT_SECRET);
+    const token = jwt.sign({ userName }, process.env.JWT_SECRET);
 
     res.json({
         token
