@@ -4,9 +4,9 @@ const { authMiddleware } = require('./middleware');
 const path = require('path');
 require('dotenv').config();
 
-express.use(express.json());
-
 const app = express();
+
+app.use(express.json());
 
 const USERS = [];
 const NOTES = [];
