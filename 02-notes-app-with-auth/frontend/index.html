@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Notes-App</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: monospace;
+            background-color: black;
+            color: white;
+        }
+
+        #root {
+            display: flex;
+            /* background-color: red; */
+            justify-content: space-between;
+            height: 100vh;
+        }
+
+        #notesArea {
+            flex: 1;
+            margin: 24px;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: repeat(1, minmax(220px, 1fr));
+            gap: 32px;
+            align-content: start;
+        }
+
+        #inputArea {
+            display: flex;
+            flex-direction: column;
+            margin: 24px;
+            padding: 24px;
+        }
+
+        #input {
+            padding: 32px;
+            height: 150px;
+            width: 250px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        #btn {
+            padding: 6px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .notesStyle {
+            width: 100%;
+            height: 124px;
+            border: 2px solid white;
+            border-radius: 10px;
+            padding: 16px;
+            background: #000000;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="root">
+        <div id="notesArea">
+            Loading...
+        </div>
+        <div id="inputArea">
+            <input id="input" type="text">
+            <button id="btn" onclick="createNote()">Create Note</button>
+        </div>
+    </div>
+
+    <script>
+
+        async function getNotes() {
+
+            const response = await axios.get("http://localhost:3000/notes", {
+                headers: {
+                    token: localStorage.getItem("token")
+                }
+            })
+
+            const notes = response.data.notes;
+
+            document.getElementById("notesArea").innerHTML = "";
+
+            for (let i = 0; i < notes.length; i++) {
+                const newEl = document.createElement("div");
+                newEl.innerHTML = notes[i].note;
+                newEl.setAttribute("class", "notesStyle");
+                document.getElementById("notesArea").appendChild(newEl);
+            }
+        }
+
+        getNotes();
+
+        async function createNote() {
+
+            const note = document.getElementById("input").value;
+            if (!note) return;
+
+            await axios.post("http://localhost:3000/notes", {
+                note
+            }, {
+                headers: {
+                    token: localStorage.getItem("token")
+                }
+            })
+
+            document.getElementById("input").value = "";
+
+            getNotes();
+        }
+
+        const input = document.getElementById("input").value;
+
+        input.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                createNote();
+            }
+        })
+    </script>
+
+</body>
+
+</html>
