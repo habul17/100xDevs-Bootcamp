@@ -67,7 +67,7 @@ app.post("/signin", (req, res) => {
 app.post("/notes", authMiddleware, (req, res) => {
 
     const note = req.body.note;
-    userName = req.userName;
+    const userName = req.userName;
 
     NOTES.push({
         note,
@@ -82,7 +82,7 @@ app.post("/notes", authMiddleware, (req, res) => {
 
 // GET - Get All Notes
 
-app.get("/notes", (req, res) => {
+app.get("/notes", authMiddleware, (req, res) => {
 
     const userName = req.userName;
 
