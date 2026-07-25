@@ -112,7 +112,7 @@ app.delete("/todo/:todo_id", authMiddleware, (req, res) => {
     const user_id = req.user_id;
     const todo_id = parseInt(req.params.todo_id);
 
-    TODOS = TODOS.filter(t => t.todo_id !== todo_id);
+    TODOS = TODOS.filter(t => !(t.todo_id === todo_id && t.user_id === user_id));
 
 
     res.json({
