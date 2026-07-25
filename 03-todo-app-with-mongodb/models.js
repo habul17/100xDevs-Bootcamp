@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
+
+mongoose.connect(process.env.MONGODB_URI)
 
 const userSchema = new mongoose.Schema({
-    userName : String,
+    username : String,
     password : String
 })
 
