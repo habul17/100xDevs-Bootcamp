@@ -52,6 +52,17 @@ const ISSUES = [{
 
 
 
+// Boards, issues and the member list are planned but not built yet.
+// Answer with 501 so callers get a clear reply instead of a hanging request.
+
+function notBuiltYet(res) {
+    res.status(501).json({
+        message: "Not built yet"
+    })
+}
+
+
+
 // POST ENDPOINTS - CREATE
 
 
@@ -209,14 +220,14 @@ app.post("/add-members-to-organization", authMiddleware, (req, res) => {
 // POST - CREATE BOARDS
 
 app.post("/boards", (req, res) => {
-
+    notBuiltYet(res);
 });
 
 
 // POST - CREATE ISSUES
 
 app.post("/issues", (req, res) => {
-
+    notBuiltYet(res);
 });
 
 
@@ -262,21 +273,21 @@ app.get("/organizations", authMiddleware, (req, res) => {
 // GET - VIEW ALL BOARDS
 
 app.get("/boards", (req, res) => {
-
+    notBuiltYet(res);
 });
 
 
 // GET - VIEW ALL ISSUES
 
 app.get("/issues", (req, res) => {
-
+    notBuiltYet(res);
 });
 
 
 // GET - VIEW ALL MEMBERS
 
 app.get("/members", (req, res) => {
-
+    notBuiltYet(res);
 });
 
 
@@ -286,7 +297,7 @@ app.get("/members", (req, res) => {
 
 
 app.put("/issues", (req, res) => {
-
+    notBuiltYet(res);
 });
 
 
