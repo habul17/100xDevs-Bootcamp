@@ -1,5 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const { authMiddleware } = require('./middleware');
 const path = require('path');
 require('dotenv').config();
@@ -14,10 +15,17 @@ const NOTES = [];
 
 // POST - signup
 
-app.post("/signup", (req, res) => {
+app.post("/signup", async (req, res) => {
 
     const userName = req.body.userName;
     const password = req.body.password;
+
+    if (!userName || !password) {
+        res.status(400).json({
+            message: "Username and password are required"
+        })
+        return;
+    }
 
     const userExist = USERS.find(user => user.userName == userName);
 
@@ -28,9 +36,12 @@ app.post("/signup", (req, res) => {
         return;
     }
 
+    // Only the bcrypt hash is kept, never the password itself
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     USERS.push({
         userName,
-        password
+        password: hashedPassword
     })
 
     res.json({
@@ -40,13 +51,14 @@ app.post("/signup", (req, res) => {
 
 // POST - signin
 
-app.post("/signin", (req, res) => {
+app.post("/signin", async (req, res) => {
     const userName = req.body.userName;
     const password = req.body.password;
 
-    const userExist = USERS.find(user => user.userName == userName && user.password == password);
+    const userExist = USERS.find(user => user.userName == userName);
+    const passwordMatches = userExist && password && await bcrypt.compare(password, userExist.password);
 
-    if (!userExist) {
+    if (!passwordMatches) {
         res.status(403).json({
             message: "Invalid Credentials"
         })

@@ -1,5 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 require('dotenv').config({ quiet: true });
 const { userModel, organizationModel } = require('./models');
@@ -13,9 +14,15 @@ app.post("/signup", async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
+    if (!username || !password) {
+        res.status(400).json({
+            message: "Username and password are required"
+        })
+        return;
+    }
+
     const userExist = await userModel.findOne({
-        username,
-        password
+        username
     })
 
     if (userExist) {
@@ -25,9 +32,12 @@ app.post("/signup", async (req, res) => {
         return;
     }
 
-    const newUser = await userModel.create({
+    // Only the bcrypt hash is stored, never the password itself
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await userModel.create({
         username,
-        password
+        password: hashedPassword
     })
 
     res.json({
@@ -43,11 +53,12 @@ app.post("/signin", async (req, res) => {
     const password = req.body.password;
 
     const userExist = await userModel.findOne({
-        username,
-        password
+        username
     })
 
-    if (!userExist) {
+    const passwordMatches = userExist && password && await bcrypt.compare(password, userExist.password);
+
+    if (!passwordMatches) {
         res.status(403).json({
             message: "Invalid Credentials"
         })
