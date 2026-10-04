@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 
 const app = express();
 
@@ -33,7 +34,7 @@ app.get("/notes", (req, res) => {
 // GET - Serve FE
 
 app.get("/", (req, res) => {
-    res.sendFile("/home/ab/Documents/100x/New/Week 9 Notes-App/frontend/index.html")
+    res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 })
 
 
